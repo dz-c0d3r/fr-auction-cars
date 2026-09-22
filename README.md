@@ -11,7 +11,8 @@ Calculateur Streamlit pour estimer le coût réel d'un véhicule acheté aux enc
 - MOBA et recharge batterie ;
 - carte grise, transport et budget réparations ;
 - calcul inverse : budget total → enchère maximale ;
-- tableau de paliers pour suivre une enchère en direct.
+- tableau de paliers pour suivre une enchère en direct ;
+- profil AUTO1.com France avec frais logistiques/administratifs selon le pays de provenance.
 
 ## Déploiement Streamlit Community Cloud
 
@@ -26,3 +27,8 @@ Calculateur Streamlit pour estimer le coût réel d'un véhicule acheté aux enc
 URL souhaitée : https://fr-auction-cars.streamlit.app
 
 Les paramètres de frais sont préremplis mais restent modifiables dans l'interface.
+
+
+## AUTO1.com France
+
+Le profil AUTO1 utilise la grille tarifaire officielle applicable au 08/04/2026 : commission d'enchère incluse dans l'offre, frais logistiques et administratifs variables selon le pays de provenance, manutention du second jeu de pneus et stationnement éventuel. Les montants de la grille sont indiqués nets de TVA.
