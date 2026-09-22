@@ -178,6 +178,166 @@ PROFILES = {
         "storage_day": 0.0,
         "note": "Exemple de barème dégressif publié : 15 % jusqu'à 3 000 €, puis 12,5 % au-delà, + 99 € dossier et 30 € Live. Vérifie la vente concernée.",
     },
+    "BCA France — Mix / Premium / Utilitaires / Accidentés": {
+        "mode": "percent",
+        "rate": 3.9,
+        "min_fee": 500.0,
+        "tier_threshold": 0.0,
+        "tier_rate_1": 0.0,
+        "tier_rate_2": 0.0,
+        "dossier": 0.0,
+        "ct": 0.0,
+        "availability": 0.0,
+        "admin": 0.0,
+        "warranty": 0.0,
+        "battery": 0.0,
+        "other": 0.0,
+        "live_inter": 0.0,
+        "live_house": 0.0,
+        "storage_day": 18.0,
+        "fees_vat": 20.0,
+        "note": "BCA France — frais acheteur 3,9 % HT du prix d'adjudication TTC, minimum 500 € HT. Profil courant pour Mix, Premium, Utilitaires, véhicules accidentés, Véhiposte, Click'N Go, Tesla Trade-In, etc.",
+    },
+    "BCA France — Mise à prix 50 € / En panne": {
+        "mode": "percent",
+        "rate": 3.9,
+        "min_fee": 390.0,
+        "tier_threshold": 0.0,
+        "tier_rate_1": 0.0,
+        "tier_rate_2": 0.0,
+        "dossier": 0.0,
+        "ct": 0.0,
+        "availability": 0.0,
+        "admin": 0.0,
+        "warranty": 0.0,
+        "battery": 0.0,
+        "other": 0.0,
+        "live_inter": 0.0,
+        "live_house": 0.0,
+        "storage_day": 18.0,
+        "fees_vat": 20.0,
+        "note": "BCA France — 3,9 % HT, minimum 390 € HT pour les ventes Mise à prix 50 € et véhicules en panne.",
+    },
+    "BCA France — VO pour pièces": {
+        "mode": "percent",
+        "rate": 3.9,
+        "min_fee": 250.0,
+        "tier_threshold": 0.0,
+        "tier_rate_1": 0.0,
+        "tier_rate_2": 0.0,
+        "dossier": 0.0,
+        "ct": 0.0,
+        "availability": 0.0,
+        "admin": 0.0,
+        "warranty": 0.0,
+        "battery": 0.0,
+        "other": 0.0,
+        "live_inter": 0.0,
+        "live_house": 0.0,
+        "storage_day": 18.0,
+        "fees_vat": 20.0,
+        "note": "BCA France — 3,9 % HT avec minimum 250 € HT pour les véhicules vendus pour pièces.",
+    },
+    "BCA France — Leasing": {
+        "mode": "fixed",
+        "rate": 0.0,
+        "min_fee": 500.0,
+        "tier_threshold": 0.0,
+        "tier_rate_1": 0.0,
+        "tier_rate_2": 0.0,
+        "dossier": 0.0,
+        "ct": 0.0,
+        "availability": 0.0,
+        "admin": 0.0,
+        "warranty": 0.0,
+        "battery": 0.0,
+        "other": 0.0,
+        "live_inter": 0.0,
+        "live_house": 0.0,
+        "storage_day": 18.0,
+        "fees_vat": 20.0,
+        "note": "BCA France — forfait acheteur 500 € HT par véhicule sur les ventes Leasing.",
+    },
+    "BCA France — Ventes européennes 100 % BEV": {
+        "mode": "fixed",
+        "rate": 0.0,
+        "min_fee": 500.0,
+        "tier_threshold": 0.0,
+        "tier_rate_1": 0.0,
+        "tier_rate_2": 0.0,
+        "dossier": 0.0,
+        "ct": 0.0,
+        "availability": 0.0,
+        "admin": 0.0,
+        "warranty": 0.0,
+        "battery": 40.0,
+        "other": 0.0,
+        "live_inter": 0.0,
+        "live_house": 0.0,
+        "storage_day": 18.0,
+        "fees_vat": 20.0,
+        "note": "BCA France — forfait 500 € HT. Le supplément AVILOO de 40 € HT s'applique uniquement si le véhicule dispose du rapport de santé batterie.",
+    },
+    "BCA France — Alphabet": {
+        "mode": "fixed",
+        "rate": 0.0,
+        "min_fee": 350.0,
+        "tier_threshold": 0.0,
+        "tier_rate_1": 0.0,
+        "tier_rate_2": 0.0,
+        "dossier": 0.0,
+        "ct": 0.0,
+        "availability": 0.0,
+        "admin": 0.0,
+        "warranty": 0.0,
+        "battery": 0.0,
+        "other": 0.0,
+        "live_inter": 0.0,
+        "live_house": 0.0,
+        "storage_day": 18.0,
+        "fees_vat": 20.0,
+        "note": "BCA France — forfait acheteur Alphabet 350 € HT par véhicule.",
+    },
+    "BCA France — Hertz": {
+        "mode": "fixed",
+        "rate": 0.0,
+        "min_fee": 250.0,
+        "tier_threshold": 0.0,
+        "tier_rate_1": 0.0,
+        "tier_rate_2": 0.0,
+        "dossier": 0.0,
+        "ct": 0.0,
+        "availability": 0.0,
+        "admin": 0.0,
+        "warranty": 0.0,
+        "battery": 0.0,
+        "other": 0.0,
+        "live_inter": 0.0,
+        "live_house": 0.0,
+        "storage_day": 18.0,
+        "fees_vat": 20.0,
+        "note": "BCA France — forfait acheteur Hertz 250 € HT par véhicule.",
+    },
+    "BCA France — Euroshop": {
+        "mode": "percent",
+        "rate": 3.0,
+        "min_fee": 450.0,
+        "tier_threshold": 0.0,
+        "tier_rate_1": 0.0,
+        "tier_rate_2": 0.0,
+        "dossier": 0.0,
+        "ct": 0.0,
+        "availability": 0.0,
+        "admin": 0.0,
+        "warranty": 0.0,
+        "battery": 0.0,
+        "other": 0.0,
+        "live_inter": 0.0,
+        "live_house": 0.0,
+        "storage_day": 18.0,
+        "fees_vat": 20.0,
+        "note": "BCA France — Euroshop : 3 % HT avec minimum 450 € HT.",
+    },
     "AUTO1.com France — tarifs 08/04/2026": {
         "mode": "included",
         "rate": 0.0,
@@ -220,6 +380,7 @@ PROFILES = {
 
 MODE_LABELS = {
     "percent": "Pourcentage",
+    "fixed": "Forfait fixe",
     "included": "Frais de vente inclus dans le marteau",
     "tiered": "Barème par tranches",
 }
@@ -256,6 +417,9 @@ def buyer_fee(
     if hammer <= 0 or mode == "included":
         return 0.0
 
+    if mode == "fixed":
+        return min_fee
+
     if mode == "tiered":
         first = min(hammer, tier_threshold) * tier_rate_1 / 100.0
         second = max(hammer - tier_threshold, 0.0) * tier_rate_2 / 100.0
@@ -285,8 +449,9 @@ def calculate(
     registration_fee: float,
     transport_fee: float,
     repair_budget: float,
+    fee_vat_rate: float = 0.0,
 ):
-    adjudication_fee = buyer_fee(
+    adjudication_fee_net = buyer_fee(
         hammer,
         mode,
         rate,
@@ -295,9 +460,9 @@ def calculate(
         tier_rate_1,
         tier_rate_2,
     )
-    storage_fee = storage_days * storage_day_fee
+    storage_fee_net = storage_days * storage_day_fee
 
-    auction_extras = (
+    auction_extras_net = (
         dossier
         + live_fee
         + ct_fee
@@ -306,16 +471,19 @@ def calculate(
         + warranty_fee
         + battery_fee
         + other_fee
-        + storage_fee
+        + storage_fee_net
     )
 
-    auction_invoice = hammer + adjudication_fee + auction_extras
+    taxable_fees_net = adjudication_fee_net + auction_extras_net
+    fee_vat_amount = taxable_fees_net * fee_vat_rate / 100.0
+    auction_invoice = hammer + taxable_fees_net + fee_vat_amount
     grand_total = auction_invoice + registration_fee + transport_fee + repair_budget
 
     return {
-        "adjudication_fee": adjudication_fee,
-        "storage_fee": storage_fee,
-        "auction_extras": auction_extras,
+        "adjudication_fee": adjudication_fee_net,
+        "storage_fee": storage_fee_net,
+        "auction_extras": auction_extras_net,
+        "fee_vat_amount": fee_vat_amount,
         "auction_invoice": auction_invoice,
         "grand_total": grand_total,
     }
@@ -352,10 +520,11 @@ with st.sidebar:
     )
     p = PROFILES[profile_name]
     is_auto1 = profile_name.startswith("AUTO1.com")
+    is_bca = profile_name.startswith("BCA France")
 
     st.info(p["note"])
 
-    mode_options = ["percent", "included", "tiered"]
+    mode_options = ["percent", "fixed", "included", "tiered"]
     mode = st.selectbox(
         "Type de frais acheteur",
         mode_options,
@@ -381,6 +550,19 @@ with st.sidebar:
             step=10.0,
             key=f"min_{profile_name}",
         )
+        tier_threshold = 0.0
+        tier_rate_1 = 0.0
+        tier_rate_2 = 0.0
+
+    elif mode == "fixed":
+        min_fee = st.number_input(
+            "Forfait acheteur (€ HT si TVA sur frais > 0)",
+            min_value=0.0,
+            value=float(p["min_fee"]),
+            step=10.0,
+            key=f"fixed_{profile_name}",
+        )
+        rate = 0.0
         tier_threshold = 0.0
         tier_rate_1 = 0.0
         tier_rate_2 = 0.0
@@ -417,6 +599,16 @@ with st.sidebar:
         tier_rate_1 = 0.0
         tier_rate_2 = 0.0
         st.success("Les frais acheteur en % sont considérés comme déjà inclus dans le prix marteau.")
+
+    fee_vat_rate = st.number_input(
+        "TVA sur les frais (%)",
+        min_value=0.0,
+        max_value=30.0,
+        value=float(p.get("fees_vat", 0.0)),
+        step=1.0,
+        help="BCA publie ses frais en HT. Pour une facture française classique, 20 % de TVA sur les frais permet d'estimer le décaissement TTC.",
+        key=f"fees_vat_{profile_name}",
+    )
 
     st.divider()
     st.subheader("🌐 Canal d'enchère")
@@ -554,6 +746,30 @@ with st.sidebar:
             key=f"other_{profile_name}",
         )
 
+    if is_bca:
+        st.divider()
+        st.subheader("🇫🇷 Options BCA France")
+
+        bca_export = st.toggle("Frais export (+140 € HT)", value=False, key=f"bca_export_{profile_name}")
+        bca_pickup = st.toggle("Retrait / collecte (+30 € HT)", value=False, key=f"bca_pickup_{profile_name}")
+        bca_recovery = st.toggle("Recovery fee (+40 € HT)", value=False, key=f"bca_recovery_{profile_name}")
+
+        if bca_export:
+            other_fee += 140.0
+        if bca_pickup:
+            other_fee += 30.0
+        if bca_recovery:
+            other_fee += 40.0
+
+        if profile_name == "BCA France — Ventes européennes 100 % BEV":
+            has_aviloo = st.toggle("Le véhicule a un rapport AVILOO (+40 € HT)", value=True, key="bca_aviloo")
+            battery_fee = 40.0 if has_aviloo else 0.0
+
+        st.caption(
+            "Stockage BCA France : 18 € HT/jour. La facturation démarre généralement au 14e jour pour un véhicule roulant acheté depuis la France, "
+            "et au 22e jour pour VHU/accidenté/non roulant. Entre uniquement les jours réellement facturés dans la section Gardiennage."
+        )
+
     st.divider()
     st.subheader("🅿️ Gardiennage")
 
@@ -637,6 +853,7 @@ with tabs[0]:
         registration_fee=registration_fee,
         transport_fee=transport_fee,
         repair_budget=repair_budget,
+        fee_vat_rate=fee_vat_rate,
     )
 
     st.divider()
@@ -682,6 +899,9 @@ with tabs[0]:
     ]
 
     lines.extend((label, amount) for label, amount in fixed_lines if amount)
+
+    if result["fee_vat_amount"]:
+        lines.append((f"TVA sur les frais ({fee_vat_rate:.0f} %)", result["fee_vat_amount"]))
 
     for label, amount in lines:
         left, right = st.columns([3, 1])
@@ -746,6 +966,7 @@ with tabs[1]:
         "registration_fee": reg_budget,
         "transport_fee": transport_budget,
         "repair_budget": repair_budget2,
+        "fee_vat_rate": fee_vat_rate,
     }
 
     max_hammer = max_hammer_for_budget(budget, calc_kwargs)
@@ -796,6 +1017,7 @@ with tabs[2]:
             registration_fee=0.0,
             transport_fee=0.0,
             repair_budget=0.0,
+            fee_vat_rate=fee_vat_rate,
         )
 
         rows.append({
@@ -838,6 +1060,7 @@ Le prix marteau n'est souvent qu'une partie du coût réel.
 - **Interencheres judiciaire** : taux judiciaire + frais Internet véhicule ;
 - **APONEM** : profils 13 % ou 15 % + dossier variable ;
 - **VPauto** : frais de vente inclus + dossier + frais Interencheres ;
+- **BCA France** : profils Mix/Premium, En panne, pièces, Leasing, BEV, Alphabet, Hertz et Euroshop + TVA/frais annexes ;
 - **AUTO1.com France** : commission incluse dans l'offre + logistique/admin selon provenance + pneus/transport/parking éventuels ;
 - **Concarneau** : judiciaire + CT + administratif + gardiennage ;
 - **barème dégressif** : deux taux selon un seuil ;
