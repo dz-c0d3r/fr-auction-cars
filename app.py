@@ -178,6 +178,126 @@ PROFILES = {
         "storage_day": 0.0,
         "note": "Exemple de barème dégressif publié : 15 % jusqu'à 3 000 €, puis 12,5 % au-delà, + 99 € dossier et 30 € Live. Vérifie la vente concernée.",
     },
+    "Enchères du Domaine — État français": {
+        "mode": "percent",
+        "rate": 11.0,
+        "min_fee": 0.0,
+        "tier_threshold": 0.0,
+        "tier_rate_1": 0.0,
+        "tier_rate_2": 0.0,
+        "dossier": 0.0,
+        "ct": 0.0,
+        "availability": 0.0,
+        "admin": 0.0,
+        "warranty": 0.0,
+        "battery": 0.0,
+        "other": 0.0,
+        "live_inter": 0.0,
+        "live_house": 0.0,
+        "storage_day": 0.0,
+        "fees_vat": 0.0,
+        "note": "Ventes du Domaine : taxe domaniale forfaitaire de 11 % ajoutée au prix d'adjudication. Pour les véhicules de fourrière, des frais de garde peuvent s'ajouter directement auprès du gardien.",
+    },
+    "OVEO — barème services 2026": {
+        "mode": "tiered",
+        "rate": 0.0,
+        "min_fee": 0.0,
+        "tier_threshold": 10000.0,
+        "tier_rate_1": 7.0,
+        "tier_rate_2": 5.0,
+        "dossier": 0.0,
+        "ct": 0.0,
+        "availability": 0.0,
+        "admin": 0.0,
+        "warranty": 0.0,
+        "battery": 0.0,
+        "other": 0.0,
+        "live_inter": 0.0,
+        "live_house": 0.0,
+        "storage_day": 5.0,
+        "fees_vat": 20.0,
+        "note": "OVEO : frais de service progressifs, 7 % sur les premiers 10 000 € puis 5 % au-delà. Base HT si TVA véhicule récupérable, sinon base TTC. Stockage possible à 5 € HT/jour après 12 jours ouvrés.",
+    },
+    "Autorola France — barème standard": {
+        "mode": "autorola",
+        "rate": 0.0,
+        "min_fee": 0.0,
+        "tier_threshold": 0.0,
+        "tier_rate_1": 0.0,
+        "tier_rate_2": 0.0,
+        "dossier": 35.0,
+        "ct": 0.0,
+        "availability": 0.0,
+        "admin": 0.0,
+        "warranty": 0.0,
+        "battery": 0.0,
+        "other": 0.0,
+        "live_inter": 0.0,
+        "live_house": 0.0,
+        "storage_day": 0.0,
+        "fees_vat": 20.0,
+        "note": "Autorola France : barème acheteur HT selon le prix vendu TTC, de 325 € HT à 1 825 € HT, plus 35 € HT de frais administratifs.",
+    },
+    "Autorola France — ventes à frais fixes 300 € HT": {
+        "mode": "fixed",
+        "rate": 0.0,
+        "min_fee": 300.0,
+        "tier_threshold": 0.0,
+        "tier_rate_1": 0.0,
+        "tier_rate_2": 0.0,
+        "dossier": 35.0,
+        "ct": 0.0,
+        "availability": 0.0,
+        "admin": 0.0,
+        "warranty": 0.0,
+        "battery": 0.0,
+        "other": 0.0,
+        "live_inter": 0.0,
+        "live_house": 0.0,
+        "storage_day": 0.0,
+        "fees_vat": 20.0,
+        "note": "Plusieurs ventes France actuelles Autorola annoncent explicitement des frais acheteurs fixes de 300 € HT. Le forfait administratif standard de 35 € HT est laissé séparément et modifiable.",
+    },
+    "Agorastore — barème véhicules 15 % + dossier": {
+        "mode": "percent",
+        "rate": 15.0,
+        "min_fee": 0.0,
+        "tier_threshold": 0.0,
+        "tier_rate_1": 0.0,
+        "tier_rate_2": 0.0,
+        "dossier": 0.0,
+        "ct": 0.0,
+        "availability": 0.0,
+        "admin": 0.0,
+        "warranty": 0.0,
+        "battery": 0.0,
+        "other": 0.0,
+        "live_inter": 0.0,
+        "live_house": 0.0,
+        "storage_day": 0.0,
+        "fees_vat": 20.0,
+        "note": "Barème Agorastore observé dans des contrats publics 2026 : 15 % HT du prix final + frais de dossier véhicule de 10 à 500 € HT selon la mise à prix. Certains lots ont un barème différent : vérifie la fiche.",
+    },
+    "Agorastore — prix affiché frais inclus": {
+        "mode": "included",
+        "rate": 0.0,
+        "min_fee": 0.0,
+        "tier_threshold": 0.0,
+        "tier_rate_1": 0.0,
+        "tier_rate_2": 0.0,
+        "dossier": 0.0,
+        "ct": 0.0,
+        "availability": 0.0,
+        "admin": 0.0,
+        "warranty": 0.0,
+        "battery": 0.0,
+        "other": 0.0,
+        "live_inter": 0.0,
+        "live_house": 0.0,
+        "storage_day": 0.0,
+        "fees_vat": 0.0,
+        "note": "À utiliser lorsque la fiche Agorastore indique explicitement « frais inclus dans le prix affiché ». Des lots 2026 affichent par exemple 14,4 % + 90 € TTC ou 18 % + dossier, déjà inclus dans le prix affiché.",
+    },
     "BCA France — Mix / Premium / Utilitaires / Accidentés": {
         "mode": "percent",
         "rate": 3.9,
@@ -383,6 +503,7 @@ MODE_LABELS = {
     "fixed": "Forfait fixe",
     "included": "Frais de vente inclus dans le marteau",
     "tiered": "Barème par tranches",
+    "autorola": "Barème Autorola par prix",
 }
 
 AUTO1_ORIGIN_FEES = {
@@ -425,6 +546,25 @@ def buyer_fee(
         second = max(hammer - tier_threshold, 0.0) * tier_rate_2 / 100.0
         return first + second
 
+    if mode == "autorola":
+        brackets = [
+            (4999, 325.0),
+            (7499, 425.0),
+            (9999, 525.0),
+            (14999, 625.0),
+            (19999, 725.0),
+            (24999, 825.0),
+            (29999, 925.0),
+            (34999, 1025.0),
+            (39999, 1225.0),
+            (44999, 1425.0),
+            (49999, 1625.0),
+        ]
+        for upper, fee in brackets:
+            if hammer <= upper:
+                return fee
+        return 1825.0
+
     return max(hammer * rate / 100.0, min_fee)
 
 
@@ -450,9 +590,11 @@ def calculate(
     transport_fee: float,
     repair_budget: float,
     fee_vat_rate: float = 0.0,
+    buyer_fee_base_factor: float = 1.0,
 ):
+    fee_base = hammer * buyer_fee_base_factor
     adjudication_fee_net = buyer_fee(
-        hammer,
+        fee_base,
         mode,
         rate,
         min_fee,
@@ -521,10 +663,12 @@ with st.sidebar:
     p = PROFILES[profile_name]
     is_auto1 = profile_name.startswith("AUTO1.com")
     is_bca = profile_name.startswith("BCA France")
+    is_oveo = profile_name.startswith("OVEO")
+    is_agorastore = profile_name.startswith("Agorastore")
 
     st.info(p["note"])
 
-    mode_options = ["percent", "fixed", "included", "tiered"]
+    mode_options = ["percent", "fixed", "included", "tiered", "autorola"]
     mode = st.selectbox(
         "Type de frais acheteur",
         mode_options,
@@ -566,6 +710,14 @@ with st.sidebar:
         tier_threshold = 0.0
         tier_rate_1 = 0.0
         tier_rate_2 = 0.0
+
+    elif mode == "autorola":
+        rate = 0.0
+        min_fee = 0.0
+        tier_threshold = 0.0
+        tier_rate_1 = 0.0
+        tier_rate_2 = 0.0
+        st.caption("Barème Autorola standard appliqué automatiquement selon le prix vendu TTC.")
 
     elif mode == "tiered":
         tier_threshold = st.number_input(
@@ -610,6 +762,20 @@ with st.sidebar:
         key=f"fees_vat_{profile_name}",
     )
 
+    buyer_fee_base_factor = 1.0
+    if is_oveo:
+        oveo_recoverable_vat = st.toggle(
+            "OVEO : TVA du véhicule récupérable",
+            value=True,
+            key="oveo_recoverable_vat",
+        )
+        if oveo_recoverable_vat:
+            buyer_fee_base_factor = 1 / 1.20
+            st.caption("OVEO calcule alors ses frais sur le prix HT du véhicule (prix TTC ÷ 1,20).")
+        else:
+            st.caption("TVA non récupérable : OVEO calcule ses frais sur le prix TTC.")
+
+
     st.divider()
     st.subheader("🌐 Canal d'enchère")
 
@@ -642,7 +808,36 @@ with st.sidebar:
     st.divider()
     st.subheader("🧾 Frais fixes du lot")
 
-    if is_auto1:
+    if is_agorastore and profile_name == "Agorastore — barème véhicules 15 % + dossier":
+        agora_starting_price = st.number_input(
+            "Mise à prix du lot (€ HT)",
+            min_value=0.0,
+            value=5000.0,
+            step=100.0,
+            key="agora_starting_price",
+            help="Le barème de dossier public consulté est déterminé selon la mise à prix.",
+        )
+        if agora_starting_price <= 500:
+            dossier = 10.0
+        elif agora_starting_price <= 1000:
+            dossier = 40.0
+        elif agora_starting_price <= 3000:
+            dossier = 150.0
+        elif agora_starting_price <= 5000:
+            dossier = 200.0
+        elif agora_starting_price <= 12500:
+            dossier = 400.0
+        else:
+            dossier = 500.0
+        st.caption(f"Frais de dossier calculés automatiquement : {dossier:.0f} € HT")
+        ct_fee = 0.0
+        availability_fee = 0.0
+        admin_fee = 0.0
+        warranty_fee = 0.0
+        battery_fee = 0.0
+        other_fee = 0.0
+        included_commission = 0.0
+    elif is_auto1:
         auto1_origin = st.selectbox(
             "Pays de provenance du véhicule",
             list(AUTO1_ORIGIN_FEES.keys()),
@@ -857,6 +1052,7 @@ with tabs[0]:
         transport_fee=transport_fee,
         repair_budget=repair_budget,
         fee_vat_rate=fee_vat_rate,
+        buyer_fee_base_factor=buyer_fee_base_factor,
     )
 
     st.divider()
@@ -873,6 +1069,10 @@ with tabs[0]:
     if result["adjudication_fee"]:
         if mode == "tiered":
             label = f"Frais acheteur ({tier_rate_1:.2f}% / {tier_rate_2:.2f}%)"
+        elif mode == "autorola":
+            label = "Frais acheteur Autorola (barème)"
+        elif mode == "fixed":
+            label = "Frais acheteur fixes"
         else:
             label = f"Frais d'adjudication ({rate:.2f} %)"
         lines.append((label, result["adjudication_fee"]))
@@ -970,6 +1170,7 @@ with tabs[1]:
         "transport_fee": transport_budget,
         "repair_budget": repair_budget2,
         "fee_vat_rate": fee_vat_rate,
+        "buyer_fee_base_factor": buyer_fee_base_factor,
     }
 
     max_hammer = max_hammer_for_budget(budget, calc_kwargs)
@@ -1021,6 +1222,7 @@ with tabs[2]:
             transport_fee=0.0,
             repair_budget=0.0,
             fee_vat_rate=fee_vat_rate,
+            buyer_fee_base_factor=buyer_fee_base_factor,
         )
 
         rows.append({
@@ -1063,6 +1265,10 @@ Le prix marteau n'est souvent qu'une partie du coût réel.
 - **Interencheres judiciaire** : taux judiciaire + frais Internet véhicule ;
 - **APONEM** : profils 13 % ou 15 % + dossier variable ;
 - **VPauto** : frais de vente inclus + dossier + frais Interencheres ;
+- **Domaine** : taxe domaniale de 11 % ;
+- **OVEO** : barème progressif 7 % / 5 % + TVA et stockage ;
+- **Autorola France** : barème standard 325–1 825 € HT ou ventes à forfait 300 € HT ;
+- **Agorastore** : barème 15 % + dossier par mise à prix, ou mode « frais inclus » selon le lot ;
 - **BCA France** : profils Mix/Premium, En panne, pièces, Leasing, BEV, Alphabet, Hertz et Euroshop + TVA/frais annexes ;
 - **AUTO1.com France** : commission incluse dans l'offre + logistique/admin selon provenance + pneus/transport/parking éventuels ;
 - **Concarneau** : judiciaire + CT + administratif + gardiennage ;
