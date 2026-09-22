@@ -750,10 +750,13 @@ with st.sidebar:
         st.divider()
         st.subheader("🇫🇷 Options BCA France")
 
+        bca_registration = st.toggle("Premier compte BCA : inscription unique (+99 € HT)", value=False, key=f"bca_registration_{profile_name}")
         bca_export = st.toggle("Frais export (+140 € HT)", value=False, key=f"bca_export_{profile_name}")
         bca_pickup = st.toggle("Retrait / collecte (+30 € HT)", value=False, key=f"bca_pickup_{profile_name}")
         bca_recovery = st.toggle("Recovery fee (+40 € HT)", value=False, key=f"bca_recovery_{profile_name}")
 
+        if bca_registration:
+            other_fee += 99.0
         if bca_export:
             other_fee += 140.0
         if bca_pickup:
