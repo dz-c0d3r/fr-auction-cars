@@ -32,3 +32,25 @@ Les paramètres de frais sont préremplis mais restent modifiables dans l'interf
 ## AUTO1.com France
 
 Le profil AUTO1 utilise la grille tarifaire officielle applicable au 08/04/2026 : commission d'enchère incluse dans l'offre, frais logistiques et administratifs variables selon le pays de provenance, manutention du second jeu de pneus et stationnement éventuel. Les montants de la grille sont indiqués nets de TVA.
+
+## Plateformes prises en charge
+
+- Alcopa Auction
+- Interencheres (volontaire/judiciaire selon profil)
+- APONEM
+- VPauto
+- BCA France
+- AUTO1.com France
+- Enchères du Domaine
+- OVEO
+- Autorola France
+- Agorastore
+- Enchères VO
+- Ayvens Carmarket
+- Arval MotorTrade
+- OPENLANE
+- Clickar / Leasys
+- CarOnSale
+- eCarsTrade
+
+Les profils à barème public sont calculés automatiquement. Quand une plateforme n'affiche pas de barème public unique, le profil reste volontairement paramétrable afin d'utiliser le montant indiqué dans le compte ou la fiche du véhicule.
