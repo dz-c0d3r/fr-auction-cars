@@ -178,6 +178,25 @@ PROFILES = {
         "storage_day": 0.0,
         "note": "Exemple de barème dégressif publié : 15 % jusqu'à 3 000 €, puis 12,5 % au-delà, + 99 € dossier et 30 € Live. Vérifie la vente concernée.",
     },
+    "AUTO1.com France — tarifs 08/04/2026": {
+        "mode": "included",
+        "rate": 0.0,
+        "min_fee": 0.0,
+        "tier_threshold": 0.0,
+        "tier_rate_1": 0.0,
+        "tier_rate_2": 0.0,
+        "dossier": 0.0,
+        "ct": 0.0,
+        "availability": 0.0,
+        "admin": 0.0,
+        "warranty": 0.0,
+        "battery": 0.0,
+        "other": 0.0,
+        "live_inter": 0.0,
+        "live_house": 0.0,
+        "storage_day": 15.0,
+        "note": "AUTO1 est une plateforme B2B réservée aux professionnels auto. La commission d'enchère (jusqu'à 1 950 € net selon le véhicule) est indiquée comme incluse dans l'offre. S'ajoutent surtout logistique + administratif selon le pays d'origine, puis options éventuelles.",
+    },
     "Personnalisé": {
         "mode": "percent",
         "rate": 0.0,
@@ -203,6 +222,21 @@ MODE_LABELS = {
     "percent": "Pourcentage",
     "included": "Frais de vente inclus dans le marteau",
     "tiered": "Barème par tranches",
+}
+
+AUTO1_ORIGIN_FEES = {
+    "France": {"logistics": 319.0, "domestic": 99.0, "export": 109.0},
+    "Autriche": {"logistics": 309.0, "domestic": 159.0, "export": 169.0},
+    "Belgique": {"logistics": 299.0, "domestic": 119.0, "export": 159.0},
+    "Allemagne": {"logistics": 299.0, "domestic": 119.0, "export": 159.0},
+    "Danemark": {"logistics": 279.0, "domestic": 129.0, "export": 139.0},
+    "Espagne": {"logistics": 279.0, "domestic": 199.0, "export": 265.0},
+    "Finlande": {"logistics": 249.0, "domestic": 119.0, "export": 129.0},
+    "Italie": {"logistics": 239.0, "domestic": 339.0, "export": 399.0},
+    "Pays-Bas": {"logistics": 279.0, "domestic": 109.0, "export": 205.0},
+    "Pologne": {"logistics": 179.0, "domestic": 79.0, "export": 109.0},
+    "Portugal": {"logistics": 209.0, "domestic": 209.0, "export": 209.0},
+    "Suède": {"logistics": 302.0, "domestic": 89.0, "export": 169.0},
 }
 
 
@@ -317,6 +351,7 @@ with st.sidebar:
         index=0,
     )
     p = PROFILES[profile_name]
+    is_auto1 = profile_name.startswith("AUTO1.com")
 
     st.info(p["note"])
 
@@ -386,79 +421,138 @@ with st.sidebar:
     st.divider()
     st.subheader("🌐 Canal d'enchère")
 
-    platform = st.selectbox(
-        "Canal",
-        ["Interencheres LIVE / Chrono", "LIVE de la maison", "Salle / ordre hors Internet"],
-        key=f"platform_{profile_name}",
-    )
-
-    if platform == "Interencheres LIVE / Chrono":
-        default_live = p["live_inter"]
-    elif platform == "LIVE de la maison":
-        default_live = p["live_house"]
+    if is_auto1:
+        platform = "AUTO1.com"
+        live_fee = 0.0
+        st.success("AUTO1.com : pas de frais Live séparés. La commission d'enchère est incluse dans l'offre affichée.")
     else:
-        default_live = 0.0
+        platform = st.selectbox(
+            "Canal",
+            ["Interencheres LIVE / Chrono", "LIVE de la maison", "Salle / ordre hors Internet"],
+            key=f"platform_{profile_name}",
+        )
 
-    live_fee = st.number_input(
-        "Frais Internet / plateforme (€ TTC)",
-        min_value=0.0,
-        value=float(default_live),
-        step=1.0,
-        key=f"live_{profile_name}_{platform}",
-    )
+        if platform == "Interencheres LIVE / Chrono":
+            default_live = p["live_inter"]
+        elif platform == "LIVE de la maison":
+            default_live = p["live_house"]
+        else:
+            default_live = 0.0
+
+        live_fee = st.number_input(
+            "Frais Internet / plateforme (€ TTC)",
+            min_value=0.0,
+            value=float(default_live),
+            step=1.0,
+            key=f"live_{profile_name}_{platform}",
+        )
 
     st.divider()
     st.subheader("🧾 Frais fixes du lot")
 
-    dossier = st.number_input(
-        "Dossier / frais de vente fixes (€)",
-        min_value=0.0,
-        value=float(p["dossier"]),
-        step=10.0,
-        key=f"dossier_{profile_name}",
-    )
-    ct_fee = st.number_input(
-        "Contrôle technique (€)",
-        min_value=0.0,
-        value=float(p["ct"]),
-        step=10.0,
-        key=f"ct_{profile_name}",
-    )
-    availability_fee = st.number_input(
-        "Mise à disposition (€)",
-        min_value=0.0,
-        value=float(p["availability"]),
-        step=10.0,
-        key=f"availability_{profile_name}",
-    )
-    admin_fee = st.number_input(
-        "Administratif / carte grise via étude (€)",
-        min_value=0.0,
-        value=float(p["admin"]),
-        step=10.0,
-        key=f"admin_{profile_name}",
-    )
-    warranty_fee = st.number_input(
-        "Garantie mécanique (€)",
-        min_value=0.0,
-        value=float(p["warranty"]),
-        step=10.0,
-        key=f"warranty_{profile_name}",
-    )
-    battery_fee = st.number_input(
-        "Certificat / santé batterie (€)",
-        min_value=0.0,
-        value=float(p["battery"]),
-        step=5.0,
-        key=f"battery_{profile_name}",
-    )
-    other_fee = st.number_input(
-        "Autres frais fixes (€)",
-        min_value=0.0,
-        value=float(p["other"]),
-        step=10.0,
-        key=f"other_{profile_name}",
-    )
+    if is_auto1:
+        auto1_origin = st.selectbox(
+            "Pays de provenance du véhicule",
+            list(AUTO1_ORIGIN_FEES.keys()),
+            index=0,
+            key="auto1_origin",
+        )
+        auto1_admin_mode = st.radio(
+            "Service administratif",
+            ["Domestique", "Export"],
+            horizontal=True,
+            key="auto1_admin_mode",
+        )
+        origin = AUTO1_ORIGIN_FEES[auto1_origin]
+
+        dossier = st.number_input(
+            "AUTO1 — frais logistique (€ net)",
+            min_value=0.0,
+            value=float(origin["logistics"]),
+            step=1.0,
+            key=f"auto1_logistics_{auto1_origin}",
+        )
+        admin_default = origin["domestic"] if auto1_admin_mode == "Domestique" else origin["export"]
+        admin_fee = st.number_input(
+            "AUTO1 — service administratif (€ net)",
+            min_value=0.0,
+            value=float(admin_default),
+            step=1.0,
+            key=f"auto1_admin_{auto1_origin}_{auto1_admin_mode}",
+        )
+
+        second_tires = st.toggle("Manutention du 2e jeu de pneus (+29 € net)", value=False, key="auto1_tires")
+        other_fee = 29.0 if second_tires else 0.0
+
+        included_commission = st.number_input(
+            "Commission d'enchère incluse dans l'offre (€ net, informatif)",
+            min_value=0.0,
+            max_value=1950.0,
+            value=0.0,
+            step=10.0,
+            key="auto1_commission_info",
+            help="Ne s'ajoute pas au total : AUTO1 indique que cette commission est comprise dans l'offre. Le minimum applicable est affiché sur le véhicule et le montant final sur la confirmation de vente.",
+        )
+        st.caption(
+            "Grille AUTO1 France du 08/04/2026 : montants nets de TVA. "
+            "Le traitement TVA dépend de la facture ; des services B2B intracommunautaires peuvent être en autoliquidation."
+        )
+
+        ct_fee = 0.0
+        availability_fee = 0.0
+        warranty_fee = 0.0
+        battery_fee = 0.0
+    else:
+        included_commission = 0.0
+        dossier = st.number_input(
+            "Dossier / frais de vente fixes (€)",
+            min_value=0.0,
+            value=float(p["dossier"]),
+            step=10.0,
+            key=f"dossier_{profile_name}",
+        )
+        ct_fee = st.number_input(
+            "Contrôle technique (€)",
+            min_value=0.0,
+            value=float(p["ct"]),
+            step=10.0,
+            key=f"ct_{profile_name}",
+        )
+        availability_fee = st.number_input(
+            "Mise à disposition (€)",
+            min_value=0.0,
+            value=float(p["availability"]),
+            step=10.0,
+            key=f"availability_{profile_name}",
+        )
+        admin_fee = st.number_input(
+            "Administratif / carte grise via étude (€)",
+            min_value=0.0,
+            value=float(p["admin"]),
+            step=10.0,
+            key=f"admin_{profile_name}",
+        )
+        warranty_fee = st.number_input(
+            "Garantie mécanique (€)",
+            min_value=0.0,
+            value=float(p["warranty"]),
+            step=10.0,
+            key=f"warranty_{profile_name}",
+        )
+        battery_fee = st.number_input(
+            "Certificat / santé batterie (€)",
+            min_value=0.0,
+            value=float(p["battery"]),
+            step=5.0,
+            key=f"battery_{profile_name}",
+        )
+        other_fee = st.number_input(
+            "Autres frais fixes (€)",
+            min_value=0.0,
+            value=float(p["other"]),
+            step=10.0,
+            key=f"other_{profile_name}",
+        )
 
     st.divider()
     st.subheader("🅿️ Gardiennage")
@@ -563,17 +657,24 @@ with tabs[0]:
             label = f"Frais d'adjudication ({rate:.2f} %)"
         lines.append((label, result["adjudication_fee"]))
     elif mode == "included":
-        lines.append(("Frais de vente inclus dans le prix marteau", 0.0))
+        if is_auto1:
+            lines.append(("Commission AUTO1 incluse dans l'offre", included_commission))
+        else:
+            lines.append(("Frais de vente inclus dans le prix marteau", 0.0))
+
+    dossier_label = "AUTO1 — frais logistique" if is_auto1 else "Dossier / frais fixes"
+    admin_label = "AUTO1 — service administratif" if is_auto1 else "Administratif"
+    other_label = "AUTO1 — 2e jeu de pneus" if is_auto1 else "Autres frais"
 
     fixed_lines = [
-        ("Dossier / frais fixes", dossier),
+        (dossier_label, dossier),
         (f"Plateforme — {platform}", live_fee),
         ("Contrôle technique", ct_fee),
         ("Mise à disposition", availability_fee),
-        ("Administratif", admin_fee),
+        (admin_label, admin_fee),
         ("Garantie mécanique", warranty_fee),
         ("Certificat / santé batterie", battery_fee),
-        ("Autres frais", other_fee),
+        (other_label, other_fee),
         (f"Gardiennage ({int(storage_days)} j)", result["storage_fee"]),
         ("Carte grise finale", registration_fee),
         ("Transport / déplacement", transport_fee),
@@ -737,6 +838,7 @@ Le prix marteau n'est souvent qu'une partie du coût réel.
 - **Interencheres judiciaire** : taux judiciaire + frais Internet véhicule ;
 - **APONEM** : profils 13 % ou 15 % + dossier variable ;
 - **VPauto** : frais de vente inclus + dossier + frais Interencheres ;
+- **AUTO1.com France** : commission incluse dans l'offre + logistique/admin selon provenance + pneus/transport/parking éventuels ;
 - **Concarneau** : judiciaire + CT + administratif + gardiennage ;
 - **barème dégressif** : deux taux selon un seuil ;
 - **Personnalisé** : tous les champs sont libres.
