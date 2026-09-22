@@ -477,6 +477,146 @@ PROFILES = {
         "storage_day": 15.0,
         "note": "AUTO1 est une plateforme B2B réservée aux professionnels auto. La commission d'enchère (jusqu'à 1 950 € net selon le véhicule) est indiquée comme incluse dans l'offre. S'ajoutent surtout logistique + administratif selon le pays d'origine, puis options éventuelles.",
     },
+    "Enchères VO — frais selon la vente": {
+        "mode": "fixed",
+        "rate": 0.0,
+        "min_fee": 0.0,
+        "tier_threshold": 0.0,
+        "tier_rate_1": 0.0,
+        "tier_rate_2": 0.0,
+        "dossier": 0.0,
+        "ct": 0.0,
+        "availability": 0.0,
+        "admin": 0.0,
+        "warranty": 0.0,
+        "battery": 0.0,
+        "other": 0.0,
+        "live_inter": 0.0,
+        "live_house": 0.0,
+        "storage_day": 0.0,
+        "fees_vat": 0.0,
+        "note": "Enchères VO : le tarif dépend de la vente. Certaines offres grand public sont affichées tous frais inclus ; une vente de collection 2026 publiée avec Enchères VO affichait 20 % TTC. Entre le taux/forfait exact indiqué dans les conditions du lot.",
+    },
+    "Ayvens Carmarket France — frais variables": {
+        "mode": "fixed",
+        "rate": 0.0,
+        "min_fee": 0.0,
+        "tier_threshold": 0.0,
+        "tier_rate_1": 0.0,
+        "tier_rate_2": 0.0,
+        "dossier": 0.0,
+        "ct": 0.0,
+        "availability": 0.0,
+        "admin": 0.0,
+        "warranty": 0.0,
+        "battery": 0.0,
+        "other": 0.0,
+        "live_inter": 0.0,
+        "live_house": 0.0,
+        "storage_day": 0.0,
+        "fees_vat": 0.0,
+        "note": "Ayvens Carmarket confirme des frais en plus du prix du véhicule, ainsi que transport et éventuellement COC, mais ne publie pas de barème France unique. Saisis le montant affiché dans ton espace Carmarket.",
+    },
+    "Arval MotorTrade France — frais de gestion variables": {
+        "mode": "fixed",
+        "rate": 0.0,
+        "min_fee": 0.0,
+        "tier_threshold": 0.0,
+        "tier_rate_1": 0.0,
+        "tier_rate_2": 0.0,
+        "dossier": 0.0,
+        "ct": 0.0,
+        "availability": 0.0,
+        "admin": 0.0,
+        "warranty": 0.0,
+        "battery": 0.0,
+        "other": 0.0,
+        "live_inter": 0.0,
+        "live_house": 0.0,
+        "storage_day": 0.0,
+        "fees_vat": 0.0,
+        "note": "Arval MotorTrade indique que des frais de gestion sont dus à l'achat, mais le montant n'est pas publié publiquement et doit être obtenu auprès du responsable de compte. Entre ici le montant de ton offre/facture.",
+    },
+    "OPENLANE Europe — achat depuis la France": {
+        "mode": "fixed",
+        "rate": 0.0,
+        "min_fee": 0.0,
+        "tier_threshold": 0.0,
+        "tier_rate_1": 0.0,
+        "tier_rate_2": 0.0,
+        "dossier": 0.0,
+        "ct": 0.0,
+        "availability": 0.0,
+        "admin": 0.0,
+        "warranty": 0.0,
+        "battery": 0.0,
+        "other": 0.0,
+        "live_inter": 0.0,
+        "live_house": 0.0,
+        "storage_day": 0.0,
+        "fees_vat": 0.0,
+        "note": "OPENLANE 2026 : frais d'enchère + frais pays + parfois frais vendeur, tous variables et affichés sur le véhicule. Options publiques : Optimo 160 €, prise en charge 85 € si transport international organisé par l'acheteur, document EX 110 € hors UE.",
+    },
+    "Clickar / Leasys France": {
+        "mode": "fixed",
+        "rate": 0.0,
+        "min_fee": 0.0,
+        "tier_threshold": 0.0,
+        "tier_rate_1": 0.0,
+        "tier_rate_2": 0.0,
+        "dossier": 0.0,
+        "ct": 0.0,
+        "availability": 0.0,
+        "admin": 0.0,
+        "warranty": 0.0,
+        "battery": 0.0,
+        "other": 0.0,
+        "live_inter": 0.0,
+        "live_house": 0.0,
+        "storage_day": 10.0,
+        "fees_vat": 20.0,
+        "note": "Clickar/Leasys : les CGV publiques n'indiquent pas de commission acheteur standard ; prix véhicule hors immatriculation, carburant et acheminement. Gardiennage : 10 € HT/jour après le délai d'enlèvement de 10 jours ouvrés.",
+    },
+    "CarOnSale — frais à partir de 99 €": {
+        "mode": "fixed",
+        "rate": 0.0,
+        "min_fee": 99.0,
+        "tier_threshold": 0.0,
+        "tier_rate_1": 0.0,
+        "tier_rate_2": 0.0,
+        "dossier": 0.0,
+        "ct": 0.0,
+        "availability": 0.0,
+        "admin": 0.0,
+        "warranty": 0.0,
+        "battery": 0.0,
+        "other": 0.0,
+        "live_inter": 0.0,
+        "live_house": 0.0,
+        "storage_day": 0.0,
+        "fees_vat": 0.0,
+        "note": "CarOnSale : inscription gratuite, frais uniquement si achat réussi. Le site public indique des frais à partir de 99 €, plafonnés, avec montant exact visible dans le compte. Modifie le forfait selon le véhicule.",
+    },
+    "eCarsTrade — véhicules provenant de France": {
+        "mode": "ecars_other",
+        "rate": 0.0,
+        "min_fee": 0.0,
+        "tier_threshold": 0.0,
+        "tier_rate_1": 0.0,
+        "tier_rate_2": 0.0,
+        "dossier": 0.0,
+        "ct": 0.0,
+        "availability": 0.0,
+        "admin": 0.0,
+        "warranty": 0.0,
+        "battery": 0.0,
+        "other": 0.0,
+        "live_inter": 0.0,
+        "live_house": 0.0,
+        "storage_day": 0.0,
+        "fees_vat": 0.0,
+        "note": "eCarsTrade : pour une voiture provenant de France (catégorie « autres pays »), commission + administratif : 250 € jusqu'à 5k, 300 € jusqu'à 10k, 350 € jusqu'à 20k, puis 400 € + 50 € par tranche de 10k supplémentaire. Transport sur devis.",
+    },
     "Personnalisé": {
         "mode": "percent",
         "rate": 0.0,
@@ -504,6 +644,7 @@ MODE_LABELS = {
     "included": "Frais de vente inclus dans le marteau",
     "tiered": "Barème par tranches",
     "autorola": "Barème Autorola par prix",
+    "ecars_other": "Barème eCarsTrade (France/autres pays)",
 }
 
 AUTO1_ORIGIN_FEES = {
@@ -545,6 +686,16 @@ def buyer_fee(
         first = min(hammer, tier_threshold) * tier_rate_1 / 100.0
         second = max(hammer - tier_threshold, 0.0) * tier_rate_2 / 100.0
         return first + second
+
+    if mode == "ecars_other":
+        if hammer <= 5000:
+            return 250.0
+        if hammer <= 10000:
+            return 300.0
+        if hammer <= 20000:
+            return 350.0
+        extra_steps = max(0, int((hammer - 20000.01) // 10000))
+        return 400.0 + (extra_steps * 50.0)
 
     if mode == "autorola":
         brackets = [
@@ -665,10 +816,11 @@ with st.sidebar:
     is_bca = profile_name.startswith("BCA France")
     is_oveo = profile_name.startswith("OVEO")
     is_agorastore = profile_name.startswith("Agorastore")
+    is_openlane = profile_name.startswith("OPENLANE")
 
     st.info(p["note"])
 
-    mode_options = ["percent", "fixed", "included", "tiered", "autorola"]
+    mode_options = ["percent", "fixed", "included", "tiered", "autorola", "ecars_other"]
     mode = st.selectbox(
         "Type de frais acheteur",
         mode_options,
@@ -710,6 +862,14 @@ with st.sidebar:
         tier_threshold = 0.0
         tier_rate_1 = 0.0
         tier_rate_2 = 0.0
+
+    elif mode == "ecars_other":
+        rate = 0.0
+        min_fee = 0.0
+        tier_threshold = 0.0
+        tier_rate_1 = 0.0
+        tier_rate_2 = 0.0
+        st.caption("Commission eCarsTrade calculée automatiquement selon le montant de l'offre pour un véhicule provenant de France.")
 
     elif mode == "autorola":
         rate = 0.0
@@ -941,6 +1101,23 @@ with st.sidebar:
             key=f"other_{profile_name}",
         )
 
+    if is_openlane:
+        st.divider()
+        st.subheader("🌍 Options OPENLANE")
+
+        openlane_optimo = st.toggle("Service Optimo (+160 €)", value=False, key="openlane_optimo")
+        openlane_pickup = st.toggle("Prise en charge transport perso international (+85 €)", value=False, key="openlane_pickup")
+        openlane_ex = st.toggle("Document export EX hors UE (+110 €)", value=False, key="openlane_ex")
+
+        if openlane_optimo:
+            other_fee += 160.0
+        if openlane_pickup:
+            other_fee += 85.0
+        if openlane_ex:
+            other_fee += 110.0
+
+        st.caption("Ajoute dans « Dossier / frais de vente fixes » le total frais d'enchère + frais pays + éventuels frais vendeur affichés sur la fiche du véhicule.")
+
     if is_bca:
         st.divider()
         st.subheader("🇫🇷 Options BCA France")
@@ -1071,6 +1248,8 @@ with tabs[0]:
             label = f"Frais acheteur ({tier_rate_1:.2f}% / {tier_rate_2:.2f}%)"
         elif mode == "autorola":
             label = "Frais acheteur Autorola (barème)"
+        elif mode == "ecars_other":
+            label = "Commission eCarsTrade"
         elif mode == "fixed":
             label = "Frais acheteur fixes"
         else:
@@ -1269,6 +1448,12 @@ Le prix marteau n'est souvent qu'une partie du coût réel.
 - **OVEO** : barème progressif 7 % / 5 % + TVA et stockage ;
 - **Autorola France** : barème standard 325–1 825 € HT ou ventes à forfait 300 € HT ;
 - **Agorastore** : barème 15 % + dossier par mise à prix, ou mode « frais inclus » selon le lot ;
+- **Enchères VO** : profil variable selon la vente ;
+- **Ayvens Carmarket** et **Arval MotorTrade** : frais variables à saisir d'après le compte/lot ;
+- **OPENLANE** : frais enchère/pays/vendeur variables + options publiques ;
+- **Clickar / Leasys** : frais annexes + gardiennage 10 € HT/j ;
+- **CarOnSale** : frais à partir de 99 €, exacts visibles dans le compte ;
+- **eCarsTrade France** : commission automatique par tranche ;
 - **BCA France** : profils Mix/Premium, En panne, pièces, Leasing, BEV, Alphabet, Hertz et Euroshop + TVA/frais annexes ;
 - **AUTO1.com France** : commission incluse dans l'offre + logistique/admin selon provenance + pneus/transport/parking éventuels ;
 - **Concarneau** : judiciaire + CT + administratif + gardiennage ;
