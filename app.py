@@ -1,5 +1,13 @@
 import streamlit as st
 
+from auction_math import calculate, eur, max_hammer_at_step, max_hammer_for_budget
+
+MERCIER_VOLUNTARY = "Mercier Auto — volontaire (2026)"
+MERCIER_JUDICIAL = "Mercier Auto — judiciaire (2026)"
+MERCIER_CONDITIONS_URL = "https://www.mercier.com/p/conditions-generales-de-vente/"
+MERCIER_SALE_URL = "https://www.mercier.com/auto/vente/vente-vehicules-mixte-01a11587-e2f0-7111-82bf-c2c388f9b058/"
+GOLF_LOT_URL = "https://www.interencheres.com/vehicules/vente-de-vehicules-a-marcq-en-baroeul-59-689782/lot-89424537.html"
+
 st.set_page_config(
     page_title="FR Auction Cars",
     page_icon="🔨",
@@ -25,6 +33,46 @@ PROFILES = {
         "live_house": 45.0,
         "storage_day": 0.0,
         "note": "Profil Alcopa 2026. Le forfait de 225 € correspond au cas CIRANO ; certains lots peuvent être à 140 €. MOBA/recharge restent à ajouter si indiqués.",
+    },
+    MERCIER_VOLUNTARY: {
+        "mode": "percent",
+        "rate": 14.28,
+        "min_fee": 360.0,
+        "tier_threshold": 0.0,
+        "tier_rate_1": 0.0,
+        "tier_rate_2": 0.0,
+        "dossier": 120.0,
+        "ct": 0.0,
+        "availability": 0.0,
+        "admin": 0.0,
+        "warranty": 0.0,
+        "battery": 0.0,
+        "other": 0.0,
+        "live_inter": 60.0,
+        "live_house": 30.0,
+        "storage_day": 20.0,
+        "fees_vat": 0.0,
+        "note": "Mercier Auto : 14,28 % TTC (minimum 360 € en volontaire), dossier 120 € TTC + supplément Live de 30 € sur Mercier Live ou 60 € sur Interencheres. Les forfaits totaux sont donc 120 / 150 / 180 €. Barème voitures et utilitaires ; hors prestige et poids lourds.",
+    },
+    MERCIER_JUDICIAL: {
+        "mode": "percent",
+        "rate": 14.28,
+        "min_fee": 0.0,
+        "tier_threshold": 0.0,
+        "tier_rate_1": 0.0,
+        "tier_rate_2": 0.0,
+        "dossier": 120.0,
+        "ct": 0.0,
+        "availability": 0.0,
+        "admin": 0.0,
+        "warranty": 0.0,
+        "battery": 0.0,
+        "other": 0.0,
+        "live_inter": 60.0,
+        "live_house": 30.0,
+        "storage_day": 20.0,
+        "fees_vat": 0.0,
+        "note": "Mercier Auto judiciaire : 14,28 % TTC, sans le minimum volontaire de 360 €. Dossier et canal préremplis selon le barème Mercier, à confirmer pour le lot. Une vente mixte n'indique pas à elle seule la nature de chaque lot.",
     },
     "Interencheres — judiciaire standard": {
         "mode": "percent",
@@ -663,145 +711,58 @@ AUTO1_ORIGIN_FEES = {
 }
 
 
-def eur(value: float) -> str:
-    return f"{value:,.2f} €".replace(",", " ").replace(".", ",")
+
+def load_mercier_golf_preset():
+    """Example only: no assumed repairs, registration costs or paid deposit."""
+    profile = MERCIER_VOLUNTARY
+    defaults = PROFILES[profile]
+    st.session_state.update({
+        "sale_profile": profile,
+        f"mode_{profile}": "percent",
+        f"rate_{profile}": 14.28,
+        f"min_{profile}": 360.0,
+        f"fees_vat_{profile}": 0.0,
+        f"platform_{profile}": "Interencheres LIVE / Chrono",
+        f"live_{profile}_Interencheres LIVE / Chrono": 60.0,
+        f"mercier_energy_{profile}": "Hybride rechargeable (PHEV)",
+        f"mercier_battery_{profile}_Hybride rechargeable (PHEV)": False,
+        f"mercier_price_basis_{profile}": "TTC",
+        f"mercier_vehicle_vat_{profile}": 20.0,
+        f"mercier_deposit_{profile}": 0.0,
+        f"storage_rate_{profile}": 20.0,
+        f"storage_days_{profile}": 0,
+        "hammer_main": 10000.0,
+        "budget_max": 12000.0,
+        "budget_scope": "Tout compris",
+        "reuse_after_sale": True,
+        "bid_increment": 100.0,
+        "registration_main": 0.0,
+        "transport_main": 0.0,
+        "repairs_main": 0.0,
+        "reg_budget": 0.0,
+        "transport_budget": 0.0,
+        "repair_budget": 0.0,
+        "grid_start": 8000,
+        "grid_stop": 12000,
+        "grid_step": 500,
+        "mercier_golf_example": True,
+    })
+    for field in ("dossier", "ct", "availability", "admin", "warranty", "other"):
+        st.session_state[f"{field}_{profile}"] = float(defaults[field])
 
 
-def buyer_fee(
-    hammer: float,
-    mode: str,
-    rate: float,
-    min_fee: float,
-    tier_threshold: float,
-    tier_rate_1: float,
-    tier_rate_2: float,
-) -> float:
-    if hammer <= 0 or mode == "included":
-        return 0.0
-
-    if mode == "fixed":
-        return min_fee
-
-    if mode == "tiered":
-        first = min(hammer, tier_threshold) * tier_rate_1 / 100.0
-        second = max(hammer - tier_threshold, 0.0) * tier_rate_2 / 100.0
-        return first + second
-
-    if mode == "ecars_other":
-        if hammer <= 5000:
-            return 250.0
-        if hammer <= 10000:
-            return 300.0
-        if hammer <= 20000:
-            return 350.0
-        extra_steps = max(0, int((hammer - 20000.01) // 10000))
-        return 400.0 + (extra_steps * 50.0)
-
-    if mode == "autorola":
-        brackets = [
-            (4999, 325.0),
-            (7499, 425.0),
-            (9999, 525.0),
-            (14999, 625.0),
-            (19999, 725.0),
-            (24999, 825.0),
-            (29999, 925.0),
-            (34999, 1025.0),
-            (39999, 1225.0),
-            (44999, 1425.0),
-            (49999, 1625.0),
-        ]
-        for upper, fee in brackets:
-            if hammer <= upper:
-                return fee
-        return 1825.0
-
-    return max(hammer * rate / 100.0, min_fee)
-
-
-def calculate(
-    hammer: float,
-    mode: str,
-    rate: float,
-    min_fee: float,
-    tier_threshold: float,
-    tier_rate_1: float,
-    tier_rate_2: float,
-    dossier: float,
-    live_fee: float,
-    ct_fee: float,
-    availability_fee: float,
-    admin_fee: float,
-    warranty_fee: float,
-    battery_fee: float,
-    other_fee: float,
-    storage_days: int,
-    storage_day_fee: float,
-    registration_fee: float,
-    transport_fee: float,
-    repair_budget: float,
-    fee_vat_rate: float = 0.0,
-    buyer_fee_base_factor: float = 1.0,
-):
-    fee_base = hammer * buyer_fee_base_factor
-    adjudication_fee_net = buyer_fee(
-        fee_base,
-        mode,
-        rate,
-        min_fee,
-        tier_threshold,
-        tier_rate_1,
-        tier_rate_2,
-    )
-    storage_fee_net = storage_days * storage_day_fee
-
-    auction_extras_net = (
-        dossier
-        + live_fee
-        + ct_fee
-        + availability_fee
-        + admin_fee
-        + warranty_fee
-        + battery_fee
-        + other_fee
-        + storage_fee_net
-    )
-
-    taxable_fees_net = adjudication_fee_net + auction_extras_net
-    fee_vat_amount = taxable_fees_net * fee_vat_rate / 100.0
-    auction_invoice = hammer + taxable_fees_net + fee_vat_amount
-    grand_total = auction_invoice + registration_fee + transport_fee + repair_budget
-
-    return {
-        "adjudication_fee": adjudication_fee_net,
-        "storage_fee": storage_fee_net,
-        "auction_extras": auction_extras_net,
-        "fee_vat_amount": fee_vat_amount,
-        "auction_invoice": auction_invoice,
-        "grand_total": grand_total,
-    }
-
-
-def max_hammer_for_budget(budget: float, calc_kwargs: dict) -> float:
-    if budget <= 0:
-        return 0.0
-
-    low = 0.0
-    high = budget
-
-    for _ in range(80):
-        mid = (low + high) / 2.0
-        result = calculate(hammer=mid, **calc_kwargs)
-        if result["grand_total"] <= budget:
-            low = mid
-        else:
-            high = mid
-
-    return low
+if st.query_params.get("preset") == "mercier-golf-gte" and not st.session_state.get("mercier_link_loaded"):
+    load_mercier_golf_preset()
+    st.session_state["mercier_link_loaded"] = True
 
 
 st.title("🔨 FR Auction Cars")
 st.caption("Calculateur multi-maisons pour estimer le vrai coût d'un véhicule aux enchères")
+st.button(
+    "Charger l'exemple Golf GTE PHEV — Mercier",
+    on_click=load_mercier_golf_preset,
+    help="Exemple modifiable : 10 000 € au marteau, budget de 12 000 €, Interencheres, aucun supplément batterie ni frais après vente présumés.",
+)
 
 with st.sidebar:
     st.header("🏛️ Profil de vente")
@@ -810,6 +771,7 @@ with st.sidebar:
         "Maison / type de vente",
         list(PROFILES.keys()),
         index=0,
+        key="sale_profile",
     )
     p = PROFILES[profile_name]
     is_auto1 = profile_name.startswith("AUTO1.com")
@@ -817,8 +779,37 @@ with st.sidebar:
     is_oveo = profile_name.startswith("OVEO")
     is_agorastore = profile_name.startswith("Agorastore")
     is_openlane = profile_name.startswith("OPENLANE")
+    is_mercier = profile_name.startswith("Mercier Auto")
+    hammer_vat_rate = 0.0
+    deposit_paid = 0.0
 
     st.info(p["note"])
+
+    if is_mercier:
+        st.caption(f"[Barème Mercier]({MERCIER_CONDITIONS_URL}) · vérifié le 26/10/2026")
+        mercier_energy = st.selectbox(
+            "Motorisation",
+            ["Thermique", "Hybride (HEV)", "Hybride rechargeable (PHEV)", "Électrique (BEV)"],
+            key=f"mercier_energy_{profile_name}",
+        )
+        if mercier_energy == "Hybride rechargeable (PHEV)":
+            st.caption("PHEV : aucun supplément électrique ou batterie automatique. Active uniquement un supplément confirmé pour le lot.")
+        mercier_price_basis = st.radio(
+            "Montant saisi pour l'enchère",
+            ["TTC", "HT à convertir en TTC"],
+            key=f"mercier_price_basis_{profile_name}",
+            help="Les tarifs Mercier Auto de ce profil sont TTC. La mention TVA récupérable ne déclenche aucune majoration ni déduction automatique.",
+        )
+        if mercier_price_basis == "HT à convertir en TTC":
+            hammer_vat_rate = st.number_input(
+                "TVA du véhicule à ajouter au montant HT (%)",
+                min_value=0.0,
+                max_value=30.0,
+                value=20.0,
+                step=1.0,
+                key=f"mercier_vehicle_vat_{profile_name}",
+            )
+            st.caption("Saisie d'un équivalent HT : conversion en TTC avant calcul des frais. Vérifie si les enchères réelles sont annoncées HT ou TTC.")
 
     mode_options = ["percent", "fixed", "included", "tiered", "autorola", "ecars_other"]
     mode = st.selectbox(
@@ -918,8 +909,9 @@ with st.sidebar:
         max_value=30.0,
         value=float(p.get("fees_vat", 0.0)),
         step=1.0,
-        help="BCA publie ses frais en HT. Pour une facture française classique, 20 % de TVA sur les frais permet d'estimer le décaissement TTC.",
+        help="Mercier : les taux et frais préremplis sont déjà TTC (0 % de TVA supplémentaire). Pour des frais publiés HT, la TVA éventuelle doit être ajoutée.",
         key=f"fees_vat_{profile_name}",
+        disabled=is_mercier,
     )
 
     buyer_fee_base_factor = 1.0
@@ -964,6 +956,10 @@ with st.sidebar:
             step=1.0,
             key=f"live_{profile_name}_{platform}",
         )
+        if is_mercier:
+            st.caption("Le supplément Live s'ajoute au dossier de 120 €. Ne rajoute pas une deuxième fois le forfait total ni les frais Interencheres génériques.")
+            if platform == "LIVE de la maison":
+                st.caption(f"Mercier Live : supplément général 30 €. La [vente du 26/10/2026]({MERCIER_SALE_URL}) annonce 180 € au total en ligne sans distinguer les canaux : saisis 60 € ici si ce forfait t'est confirmé.")
 
     st.divider()
     st.subheader("🧾 Frais fixes du lot")
@@ -1086,13 +1082,22 @@ with st.sidebar:
             step=10.0,
             key=f"warranty_{profile_name}",
         )
-        battery_fee = st.number_input(
-            "Certificat / santé batterie (€)",
-            min_value=0.0,
-            value=float(p["battery"]),
-            step=5.0,
-            key=f"battery_{profile_name}",
-        )
+        if is_mercier:
+            mercier_battery_confirmed = st.checkbox(
+                "Supplément batterie de 40 € confirmé par Mercier",
+                value=False,
+                key=f"mercier_battery_{profile_name}_{mercier_energy}",
+                help="Le tarif publié vise les véhicules électriques / rapports de batterie. Il n'est pas appliqué automatiquement aux hybrides rechargeables.",
+            )
+            battery_fee = 40.0 if mercier_battery_confirmed else 0.0
+        else:
+            battery_fee = st.number_input(
+                "Certificat / santé batterie (€)",
+                min_value=0.0,
+                value=float(p["battery"]),
+                step=5.0,
+                key=f"battery_{profile_name}",
+            )
         other_fee = st.number_input(
             "Autres frais fixes (€)",
             min_value=0.0,
@@ -1162,6 +1167,24 @@ with st.sidebar:
         step=1,
         key=f"storage_days_{profile_name}",
     )
+    if is_mercier:
+        st.caption("Enlèvement au plus tard le vendredi suivant la vente ; au-delà, 20 € TTC/jour. Entre uniquement les jours de retard facturés.")
+        st.divider()
+        st.subheader("Acompte et solde")
+        deposit_paid = st.number_input(
+            "Acompte déjà imputé à la facture (€)",
+            min_value=0.0,
+            value=0.0,
+            step=100.0,
+            key=f"mercier_deposit_{profile_name}",
+            help="Saisis un acompte effectivement payé et déduit du bordereau. Une empreinte bancaire simplement bloquée n'est pas encore un acompte.",
+        )
+        st.caption("Empreinte Live habituelle : 2 000 €, transformée en acompte si tu remportes le lot. Elle ne s'ajoute pas au prix et ne change pas ton plafond.")
+
+if is_mercier:
+    st.info(f"**{mercier_energy}** · **{platform}** · Dossier + canal : **{eur(dossier + live_fee)}** · Supplément batterie : **{eur(battery_fee)}**")
+    if st.session_state.get("mercier_golf_example"):
+        st.caption(f"[Exemple Golf GTE — lot 304]({GOLF_LOT_URL}) : PHEV, 29/12/2022, 215 347 km, toit ouvrant à revoir. La vente est mixte ; le préréglage initial utilise le profil volontaire par prudence. Les montants de 10 000 € et 12 000 € sont des exemples modifiables. Ajoute tes frais après vente.")
 
 tabs = st.tabs([
     "💶 Coût total",
@@ -1230,18 +1253,21 @@ with tabs[0]:
         repair_budget=repair_budget,
         fee_vat_rate=fee_vat_rate,
         buyer_fee_base_factor=buyer_fee_base_factor,
+        hammer_vat_rate=hammer_vat_rate,
     )
 
     st.divider()
 
     m1, m2, m3 = st.columns(3)
-    m1.metric("Prix marteau", eur(hammer))
-    m2.metric("Frais enchères", eur(result["auction_invoice"] - hammer))
-    m3.metric("TOTAL", eur(result["grand_total"]))
+    m1.metric("À payer à la maison", eur(result["auction_invoice"]))
+    m2.metric("Dont frais enchères", eur(result["auction_invoice"] - result["hammer_ttc"]))
+    m3.metric("Budget tout compris", eur(result["grand_total"]))
+    if hammer_vat_rate:
+        st.caption(f"Prix saisi HT : {eur(hammer)} · TVA véhicule : {eur(result['hammer_vat_amount'])} · Prix véhicule TTC : {eur(result['hammer_ttc'])}")
 
     st.subheader("Détail")
 
-    lines = [("Prix d'adjudication", hammer)]
+    lines = [("Prix du véhicule TTC", result["hammer_ttc"])]
 
     if result["adjudication_fee"]:
         if mode == "tiered":
@@ -1292,15 +1318,38 @@ with tabs[0]:
 
     st.success(f"Total à prévoir : **{eur(result['grand_total'])}**")
     st.caption(f"Bordereau de la maison de vente estimé : {eur(result['auction_invoice'])}")
+    if is_mercier and deposit_paid:
+        if deposit_paid > result["auction_invoice"]:
+            st.warning("L'acompte saisi dépasse le bordereau estimé : vérifie son montant.")
+        else:
+            st.info(f"Acompte déjà payé : **{eur(deposit_paid)}** · Solde à régler à Mercier : **{eur(result['auction_invoice'] - deposit_paid)}**. Le coût d'achat reste inchangé.")
 
 with tabs[1]:
+    budget_scope = st.radio(
+        "Ce que couvre ton budget",
+        ["Tout compris", "Facture de la maison uniquement"],
+        key="budget_scope",
+        horizontal=True,
+    )
     budget = st.number_input(
-        "Budget maximum tout compris (€)",
+        "Budget maximum disponible (€ TTC)",
         min_value=0.0,
         value=25000.0,
         step=100.0,
         key="budget_max",
     )
+
+    reuse_after_sale = st.checkbox(
+        "Reprendre les frais après vente de Coût total",
+        value=True,
+        key="reuse_after_sale",
+        disabled=budget_scope != "Tout compris",
+        help="La carte grise, le transport et les réparations sont repris automatiquement. Décoche pour simuler une autre réserve dans cet onglet.",
+    )
+    if reuse_after_sale:
+        st.session_state["reg_budget"] = registration_fee
+        st.session_state["transport_budget"] = transport_fee
+        st.session_state["repair_budget"] = repair_budget
 
     d1, d2 = st.columns(2)
     with d1:
@@ -1310,6 +1359,7 @@ with tabs[1]:
             value=0.0,
             step=10.0,
             key="reg_budget",
+            disabled=budget_scope != "Tout compris" or reuse_after_sale,
         )
         transport_budget = st.number_input(
             "Transport (€)",
@@ -1317,6 +1367,7 @@ with tabs[1]:
             value=0.0,
             step=25.0,
             key="transport_budget",
+            disabled=budget_scope != "Tout compris" or reuse_after_sale,
         )
 
     with d2:
@@ -1326,6 +1377,7 @@ with tabs[1]:
             value=0.0,
             step=50.0,
             key="repair_budget",
+            disabled=budget_scope != "Tout compris" or reuse_after_sale,
         )
 
     calc_kwargs = {
@@ -1345,25 +1397,56 @@ with tabs[1]:
         "other_fee": other_fee,
         "storage_days": int(storage_days),
         "storage_day_fee": storage_day_fee,
-        "registration_fee": reg_budget,
-        "transport_fee": transport_budget,
-        "repair_budget": repair_budget2,
+        "registration_fee": reg_budget if budget_scope == "Tout compris" else 0.0,
+        "transport_fee": transport_budget if budget_scope == "Tout compris" else 0.0,
+        "repair_budget": repair_budget2 if budget_scope == "Tout compris" else 0.0,
         "fee_vat_rate": fee_vat_rate,
         "buyer_fee_base_factor": buyer_fee_base_factor,
+        "hammer_vat_rate": hammer_vat_rate,
     }
 
-    max_hammer = max_hammer_for_budget(budget, calc_kwargs)
-    max_result = calculate(hammer=max_hammer, **calc_kwargs)
-
-    st.metric("Enchère maximale théorique", eur(max_hammer))
-    st.warning("En Live, garde une marge et arrondis au palier inférieur.")
-    st.caption(
-        f"Bordereau estimé : {eur(max_result['auction_invoice'])} · "
-        f"Total tout compris : {eur(max_result['grand_total'])}"
+    bid_increment = st.number_input(
+        "Pas d'enchère pour arrondir le plafond (€)",
+        min_value=1.0,
+        value=100.0,
+        step=50.0,
+        key="bid_increment",
+        help="Le plafond est arrondi au multiple inférieur de ce pas. Adapte-le aux paliers acceptés pendant la vente.",
     )
+    max_hammer = max_hammer_for_budget(budget, calc_kwargs)
+    max_bid = max_hammer_at_step(budget, calc_kwargs, bid_increment)
+    bid_unit = "HT saisi" if hammer_vat_rate else "TTC"
+    st.metric(f"Enchère maximale au palier choisi ({bid_unit})", eur(max_bid))
+    st.caption(f"Limite au centime avant arrondi au palier : {eur(max_hammer)} ({bid_unit}).")
+    if max_bid <= 0:
+        st.warning("Ce budget ne permet aucune mise positive au pas choisi, une fois les frais et réserves déduits.")
+    else:
+        max_result = calculate(hammer=max_bid, **calc_kwargs)
+        next_bid = max_bid + bid_increment
+        next_result = calculate(hammer=next_bid, **calc_kwargs)
+        st.success(
+            f"À ce plafond : **{eur(max_result['auction_invoice'])}** à payer à la maison · "
+            f"**{eur(max_result['grand_total'])}** pour le budget retenu · "
+            f"**{eur(budget - max_result['grand_total'])}** de marge."
+        )
+        st.warning(
+            f"Le palier suivant à {eur(next_bid)} coûterait {eur(next_result['grand_total'])}, "
+            f"soit {eur(next_result['grand_total'] - budget)} au-dessus de ton budget."
+        )
+        if hammer_vat_rate:
+            st.caption(f"Équivalent du plafond en prix véhicule TTC : {eur(max_result['hammer_ttc'])}. Utilise cette base si la vente annonce ses enchères TTC.")
+        if is_mercier and deposit_paid:
+            st.caption("L'acompte n'est pas déduit du budget : il fait déjà partie du coût de la voiture.")
 
 with tabs[2]:
     st.write("Visualise instantanément le coût réel à plusieurs niveaux d'enchère.")
+    include_after_sale = st.checkbox(
+        "Inclure les frais après vente saisis dans Coût total",
+        value=True,
+        key="grid_after_sale",
+    )
+    if hammer_vat_rate:
+        st.caption("Les paliers ci-dessous sont des montants saisis HT, convertis en TTC pour calculer le bordereau.")
 
     start = st.number_input("Départ (€)", min_value=0, value=15000, step=500, key="grid_start")
     stop = st.number_input(
@@ -1397,17 +1480,19 @@ with tabs[2]:
             other_fee=other_fee,
             storage_days=int(storage_days),
             storage_day_fee=storage_day_fee,
-            registration_fee=0.0,
-            transport_fee=0.0,
-            repair_budget=0.0,
+            registration_fee=registration_fee if include_after_sale else 0.0,
+            transport_fee=transport_fee if include_after_sale else 0.0,
+            repair_budget=repair_budget if include_after_sale else 0.0,
             fee_vat_rate=fee_vat_rate,
             buyer_fee_base_factor=buyer_fee_base_factor,
+            hammer_vat_rate=hammer_vat_rate,
         )
 
         rows.append({
-            "Prix marteau": eur(current),
-            "Frais enchères": eur(r["auction_invoice"] - current),
+            "Prix saisi HT" if hammer_vat_rate else "Prix marteau TTC": eur(current),
+            "Frais enchères": eur(r["auction_invoice"] - r["hammer_ttc"]),
             "Total bordereau": eur(r["auction_invoice"]),
+            "Budget total": eur(r["grand_total"]),
         })
         current += int(step)
 
@@ -1441,6 +1526,7 @@ Le prix marteau n'est souvent qu'une partie du coût réel.
     st.markdown(
         """
 - **Alcopa** : pourcentage + minimum + forfait + canal Live ;
+- **Mercier Auto** : volontaire/judiciaire, 14,28 % TTC, dossier + canal, PHEV distinct d'un électrique et supplément batterie uniquement sur confirmation ;
 - **Interencheres judiciaire** : taux judiciaire + frais Internet véhicule ;
 - **APONEM** : profils 13 % ou 15 % + dossier variable ;
 - **VPauto** : frais de vente inclus + dossier + frais Interencheres ;
@@ -1465,3 +1551,4 @@ Le prix marteau n'est souvent qu'une partie du coût réel.
 st.caption(
     "FR Auction Cars · Calculateur indicatif. Les conditions de la maison de vente et du lot font foi."
 )
+
